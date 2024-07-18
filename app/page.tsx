@@ -1,30 +1,24 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
-   <main className="bg-gray-200 h-screen flex items-center 
-   justify-center p-5 sm:bg-gray-200
-    md:bg-green-100 lg:bg-cyan-100 xl:bg-orange-100
-    2xl:bg-purple-100
-    ">
-    <a>파란 하이퍼링크</a>
-    <div className="btn">
-
-      {["Nico","Me","You","Yourself"].map((person,index) => 
-        <div key={index} className="flex items-center 
-        gap-5  rounded-xl group">
-          <div className="size-10 rounded-full bg-blue-400"/>
-          <span className="text-lg font-medium">{person}</span>
-          <div className="size-6 flex rounded-full bg-red-500
-           text-white relative
-          items-center justify-center">
-            <span className="z-10 group-hover:text-red-500">{index}</span>
-            <div className="size-6 bg-red-500 rounded-full animate-ping absolute"></div>
-          </div>
+    <div className='flex flex-col items-center justify-between min-h-screen p-6'>
+      <div className='my-auto *:font-medium flex flex-col items-center gap-2  '>
+        <span className='text-9xl'>🥕</span>
+        <h1 className='text-4xl'>당근</h1>
+        <h2 className='text-2xl'>당근 마켓에 어서오세요!</h2>
+      </div>
+      <div className='flex flex-col items-center gap-3  w-full'>
+        <Link href="/create-account" 
+        className='primary-btn py-2.5 text-lg'>
+          시작하기</Link>
+        <div className='flex gap-2 '>
+          <span>이미 계정이 있나요?</span>
+          <Link href="/login" className='hover:underline '>로그인</Link>
         </div>
-
-       
-      )}
+      </div>
     </div>
-   </main>
+ 
 
    
   );

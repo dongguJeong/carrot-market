@@ -7,15 +7,8 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend : {
-      margin: {
-        'Naruto' : '10px',
-      },
-      borderRadius : {
-        'sexy-name' : '11.11px',
-        }
-    },
+   
   },
-  plugins: [require('@tailwindcss/forms'),],
+  plugins: [],
 };
 export default config;
