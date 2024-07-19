@@ -1,8 +1,16 @@
-import FormButton from '@/components/form-btn';
-import FormInput from '@/components/form-input';
+"use client";
+
+import FormButton from '@/components/button';
+import Input from '@/components/input';
 import SocialLogin from '@/components/social-login';
+import { useFormState } from 'react-dom';
+import { createAccount } from './action';
+import { PASSWORD_MIN_LENGTH } from '@/lib/constants';
 
 export default function CreateAccount() {
+
+  const [state,action] = useFormState(createAccount,null);
+
   return (
     <div className='flex flex-col gap-10 py-8 px-6'>
       <div className='flex flex-col gap-2 *:font-medium'>
@@ -10,17 +18,31 @@ export default function CreateAccount() {
         <h2 className='text-xl'>Fill in the form below to join!</h2>
       </div>
       
-      <form className='flex flex-col gap-3'>
-        <FormInput
-        type="text" placeholder='Username' required  errors = {[""]}/>
-        <FormInput
-        type="email" placeholder='Email' required  errors = {[""]}/> 
-        <FormInput
-        type="password" placeholder='Password' required  errors = {[""]}/>
-        <FormInput
-        type="text" placeholder='Confirm Password' required  errors = {[""]}/>
+      <form action={action} className='flex flex-col gap-3'>
+        <Input
+        name='username'
+        type="text" placeholder='Username' required
+        errors={state?.fieldErrors.username}  />
+        <Input
+        name='email'
+        type="email" placeholder='Email' required
+        minLength={3}
+        maxLength={10}
+        errors={state?.fieldErrors.email}  /> 
+        <Input
+        name='password'
+        type="password" placeholder='Password' required
+        minLength={PASSWORD_MIN_LENGTH}
+        maxLength={10}
+        errors={state?.fieldErrors.password}  />
+        <Input
+        name='confirm_password'
+        type="text" placeholder='Confirm Password' required
+       minLength={PASSWORD_MIN_LENGTH}
+        maxLength={10}
+        errors={state?.fieldErrors.confirm_password}  />
         
-        <FormButton loading={false} text="Create account"/>
+        <FormButton text="Create account"/>
       </form>
 
       <SocialLogin/>

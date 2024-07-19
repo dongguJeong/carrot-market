@@ -1,18 +1,17 @@
 "use client"
 
-import FormButton from '@/components/form-btn';
-import FormInput from '@/components/form-input';
+import Button from '@/components/button';
+import Input from '@/components/input';
 import SocialLogin from '@/components/social-login';
-import { redirect } from 'next/navigation';
 import { useFormState } from 'react-dom';
-import handleForm from './action';
+import login from './action';
+import { PASSWORD_MIN_LENGTH } from '@/lib/constants';
 
 export default function Login() {
   
-
   // 리턴값을 state로 저장하고, action을 트리거로 제공
   // use server 와 use client는 서로 분리되어야 한다. 같은 페이지에 적힐 수 없다
-  const [state, action] = useFormState(handleForm,null);
+  const [state, action] = useFormState(login,null);
   //action을 실행하면 handleForm 이 실행되고, handleForm의 리턴값이 state에 저장된다
   
 
@@ -24,14 +23,17 @@ export default function Login() {
       </div>
       
       <form className='flex flex-col gap-3' action={action}>
-        <FormInput
+        <Input
         name='email'
-        type="email" placeholder='Email' required  errors = {[]}/> 
-        <FormInput
+        type="email" placeholder='Email' required 
+        errors={state?.fieldErrors?.email}/> 
+        <Input
         name='password'
-        type="password" placeholder='Password' required  errors = {state?.errors ?? []}/>
+        minLength={PASSWORD_MIN_LENGTH}
+        errors={state?.fieldErrors?.password}
+        type="password" placeholder='Password' required />
         
-        <FormButton  text="Create account"/>
+        <Button  text="Create account"/>
       </form>
 
       <SocialLogin/>
