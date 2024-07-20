@@ -26,20 +26,18 @@ export default function CreateAccount() {
         <Input
         name='email'
         type="email" placeholder='Email' required
-        minLength={3}
-        maxLength={10}
         errors={state?.fieldErrors.email}  /> 
         <Input
         name='password'
         type="password" placeholder='Password' required
         minLength={PASSWORD_MIN_LENGTH}
-        maxLength={10}
+        
         errors={state?.fieldErrors.password}  />
         <Input
         name='confirm_password'
         type="text" placeholder='Confirm Password' required
        minLength={PASSWORD_MIN_LENGTH}
-        maxLength={10}
+        
         errors={state?.fieldErrors.confirm_password}  />
         
         <FormButton text="Create account"/>
