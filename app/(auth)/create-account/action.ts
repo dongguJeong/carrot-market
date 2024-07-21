@@ -5,7 +5,7 @@ import {z} from 'zod';
 import db from "@/lib/db";
 import bcrypt from 'bcrypt'
 import { redirect } from "next/navigation";
-import getSession from '@/lib/session';
+import {getSession} from '@/lib/session';
 
 
 function checkUsername(username : string){

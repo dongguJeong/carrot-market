@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import getSession from "./lib/session";
+import {getSession} from "./lib/session";
 
 interface Routes{
     [key:string] : boolean;
@@ -10,6 +10,8 @@ const publicOnlyUrls : Routes = {
     "/login" : true,
     "/sms" : true,
     "/create-account" : true,
+    "/github/start" : true,
+    "/github/complete" : true,
 }
 
 // 모든 single request에 대해 발생
@@ -22,9 +24,9 @@ export async function middleware(request:NextRequest){
         }
     }
     else{
-        if(exists){
-            return NextResponse.redirect(new URL("/products",request.url));
-        }
+        // if(exists){
+        //     return NextResponse.redirect(new URL("/products",request.url));
+        // }
     }
 }
 
