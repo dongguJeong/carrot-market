@@ -22,7 +22,7 @@ import { usePathname } from "next/navigation";
     export default function TabBar() {
         const pathname = usePathname();
         return (
-          <div className="fixed bottom-0 w-full mx-auto 
+          <div className="fixed bottom-0 w-full mx-auto bg-neutral-800
           max-w-screen-sm grid grid-cols-5 border-t-neutral-600 border-t
           px-5 py-3
           ">
