@@ -15,6 +15,7 @@ export default function AddProduct(){
     const [preview, setPreview] = useState("");
     const [uploadURL, setUploadUrl] = useState("");
     const [file, setFile] = useState<File|null>(null);
+    const [error , setError] = useState("");
     
     const {register, handleSubmit , 
         formState : {errors}, setValue} = useForm<ProductType>({
@@ -43,7 +44,10 @@ export default function AddProduct(){
         formData.append("price",data.price + "");
         formData.append("description",data.description);
         formData.append("photo",data.photo);
-        return uploadProduct(formData);
+        const errors = uploadProduct(formData);
+        // if(errors){
+        //     //setError(errors);
+        // }
     });
 
     const onValid = async() => {

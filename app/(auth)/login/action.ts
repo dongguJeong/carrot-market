@@ -3,7 +3,7 @@ import { PASSWORD_ERR_MESSAGE, PASSWORD_MIN_LENGTH, PASSWORD_REGEX } from '@/lib
 import db from '@/lib/db';
 import {z} from 'zod';
 import bcrypt from 'bcrypt'
-import getSession from '@/lib/session';
+import {getSession} from '@/lib/session';
 import { redirect } from 'next/navigation';
 
 const checkEmailExists = (email : string) => {

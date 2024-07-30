@@ -26,7 +26,7 @@ export default function Login() {
         <Input
         name='email'
         type="email" placeholder='Email' required 
-        errors={state?.fieldErrors?.email}/> 
+        /> 
         <Input
         name='password'
         minLength={PASSWORD_MIN_LENGTH}

@@ -5,6 +5,7 @@ import { UserIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { unstable_cache as nextCache, revalidateTag } from "next/cache";
 
 async function getProduct(id : number){
    const product = db.product.findUnique({
@@ -23,12 +24,45 @@ async function getProduct(id : number){
    return product;
 }
 
+async function getProductTitle(id : number){
+    const product = db.product.findUnique({
+      where :{
+         id ,
+      },
+      select : {
+        title : true
+      }
+      
+    });
+    return product;
+ }
+
+ const getCachedProduct = nextCache(getProduct, 
+    ['product-detail'], {
+        tags : ['product-detail'],
+});
+
+ 
+ const getCachedProductTitle = nextCache(getProductTitle, 
+    ['product-title'], {
+        tags : ['#food',"#foodie","여러가지가 가능해요",'중복도 되요','product-title'],
+});
+
 async function getIsOwner(id : number){
-    const session = await getSession();
-    if(session.id){
-        return session.id === id;
-    }
+    // const session = await getSession();
+    // if(session.id){
+    //     return session.id === id;
+    // }
     return false;
+}
+
+export async function  generateMetadata({params} : {
+    params : {id : string}
+}){ 
+    const product = await getCachedProductTitle(Number(params.id));
+    return {
+        title : product?.title,
+    }
 }
 
 export default async function ProdctDetail({params} : {
@@ -38,7 +72,7 @@ export default async function ProdctDetail({params} : {
     if(isNaN(id)){
         return notFound();
     }
-    const product = await getProduct(id);
+    const product = await getCachedProduct(id);
 
     if(!product){
         return notFound();
@@ -57,6 +91,10 @@ export default async function ProdctDetail({params} : {
         redirect("/products");
     }
 
+    const revalidate = async() => {
+        'use server'
+        revalidateTag('product-detail');
+    }
     return (
         <div className="">
             <div className="relative aspect-square w-2/4">
@@ -84,9 +122,24 @@ export default async function ProdctDetail({params} : {
                 items-center
             ">
                 <span className="font-semibold">{formatToWon(product.price)}원</span>
-                {isOwner ? <button className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold">Delete product</button> : null}
+                
+                <form action={revalidate}>
+                <button className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold">
+                    Revalidate title cache</button>
+                </form>  
+
                 <Link className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold" href={``}>채팅하기</Link>
             </div>
         </div>
     )
+}
+
+
+export async function generateStaticParams(){
+    const products = await db.product.findMany({
+        select : {
+            id : true,
+        }
+    })
+    return products.map(product=> ({id : product.id + ""}));
 }

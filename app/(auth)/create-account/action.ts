@@ -129,9 +129,9 @@ export async function  createAccount(prevState : any,
         });
         
         // 회원가입을 하면 쿠키를 만들어 저장한다
-        const sessiong = await getSession();
-          sessiong.id = user.id;
-          await sessiong.save();
+        const session = await getSession();
+          session.id = user.id;
+          await session.save();
           redirect("/profile");
 
     }
