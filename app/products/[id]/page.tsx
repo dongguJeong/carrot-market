@@ -1,11 +1,10 @@
 import db from "@/lib/db";
-import { getSession } from "@/lib/session";
 import { formatToWon } from "@/lib/utils";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { unstable_cache as nextCache, revalidateTag } from "next/cache";
+import { getSession } from "@/lib/session";
 
 async function getProduct(id : number){
    const product = db.product.findUnique({
@@ -53,7 +52,7 @@ async function getIsOwner(id : number){
     // if(session.id){
     //     return session.id === id;
     // }
-    return false;
+    return true;
 }
 
 export async function  generateMetadata({params} : {
@@ -95,6 +94,30 @@ export default async function ProdctDetail({params} : {
         'use server'
         revalidateTag('product-detail');
     }
+
+    const createChatRoom = async () => {
+        "use server";
+        const session = await getSession();
+        
+        const room = await db.chatRoom.create({
+            data : {
+                users : {
+                    connect : [
+                        {
+                            id : product.id,
+                        },
+                        {
+                            id : session.id,
+                        }
+                    ]
+                }
+            },
+            select : {
+                id : true,
+            }
+        })
+        redirect(`/chats/${room.id}`);
+      };
     return (
         <div className="">
             <div className="relative aspect-square w-2/4">
@@ -128,7 +151,12 @@ export default async function ProdctDetail({params} : {
                     Revalidate title cache</button>
                 </form>  
 
-                <Link className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold" href={``}>채팅하기</Link>
+                <form action={createChatRoom}>
+                    <button className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold" >
+                    채팅하기
+                    </button>
+                </form>   
+                
             </div>
         </div>
     )
